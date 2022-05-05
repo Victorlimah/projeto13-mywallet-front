@@ -8,13 +8,11 @@ export const Input = styled.input`
   width: 85%;
   margin: 0 auto 15px;
 
-  &::placeholder {
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 23px;
-    color: #000000;
-    padding-left: 15px;
-  }
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  color: #000000;
+  padding-left: 15px;
 `;
