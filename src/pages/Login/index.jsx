@@ -1,40 +1,69 @@
 import axios from "axios";
 import * as S from "./style";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import Input from "../../components/Input";
-import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "./../../provider/userContext";
+import UserContext from "./../../provider/UserContext";
+import Loading from "../../components/Loading";
 
 export default function Login() {
   const navigate = useNavigate();
   const { setToken } = useContext(UserContext);
+  const [textInput, setTextInput] = useState("Entrar");
+  const [isActive, setIsActive] = useState(true);
 
   return (
     <S.Container>
       <S.Title>MyWallet</S.Title>
-      <Input placeholder="E-mail" />
-      <Input placeholder="Senha" type="password" />
-      <Button text="Entrar" onClick={() => singIn(navigate)} />
+      <S.Form onSubmit={singIn}>
+        <Input
+          required
+          type="email"
+          placeholder="E-mail"
+          disabled={!isActive}
+        />
+
+        <Input
+          required
+          type="password"
+          placeholder="Senha"
+          disabled={!isActive}
+        />
+
+        <S.Button disabled={!isActive}>{textInput}</S.Button>
+      </S.Form>
       <S.Link>
         <Link to="/sing-up">Primeira vez? Cadastre-se</Link>
       </S.Link>
     </S.Container>
   );
 
-  async function singIn() {
-    const email = document.querySelector("input[placeholder='E-mail']").value;
-    const password = document.querySelector("input[placeholder='Senha']").value;
+  async function singIn(event) {
+    event.preventDefault();
+    setTextInput(Loading());
+    setIsActive(false);
+    let elementEmail = document.querySelector("input[placeholder='E-mail']");
+    let elementPassword = document.querySelector("input[placeholder='Senha']");
 
-    const response = await axios.post("http://localhost:5000/sing-in", {
-      email,
-      password,
-    });
+    let email = elementEmail.value;
+    let password = elementPassword.value;
 
-    if (response.status === 200) {
-      setToken(response.data.token);
-      navigate("/home");
-    } else {
+    try {
+      const response = await axios.post("http://localhost:5000/sing-in", {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        setToken(response.data);
+        navigate("/home");
+      }
+    } catch (error) {
+      email = "";
+      password = "";
+      setTextInput("Entrar");
+      setIsActive(true);
+
       alert("Login ou senha incorretos!");
     }
   }
