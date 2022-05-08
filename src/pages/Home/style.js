@@ -90,13 +90,23 @@ export const TransactionEmpty = styled.div`
   color: #868686;
 `;
 
+export const TransactionList = styled.div`
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+`;
+
 export const Transaction = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 50px;
-  padding: 0 20px;
+  height: 35px;
+  padding: 0 25px;
+  margin-top: 10px;
   cursor: pointer;
   transition: background-color 0.2s;
 
@@ -110,6 +120,10 @@ export const Transaction = styled.div`
 
   .cashOut {
     color: #c70000;
+  }
+
+  span {
+    margin-left: 15px;
   }
 `;
 
@@ -129,6 +143,7 @@ export const TransactionTitle = styled.span`
   font-size: 16px;
   line-height: 19px;
   color: #000000;
+  text-align: center;
 `;
 
 export const TransactionValue = styled.span`

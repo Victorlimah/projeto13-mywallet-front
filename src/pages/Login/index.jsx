@@ -55,12 +55,10 @@ export default function Login() {
       });
 
       if (response.status === 200) {
-        setToken(response.data);
+        setToken(response.data.token);
         navigate("/home");
       }
     } catch (error) {
-      email = "";
-      password = "";
       setTextInput("Entrar");
       setIsActive(true);
 

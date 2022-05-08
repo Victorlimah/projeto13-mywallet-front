@@ -45,23 +45,26 @@ export default function Home() {
             Não há registros de entrada ou saída
           </S.TransactionEmpty>
         ) : (
-          <>
+          <S.TransactionList>
             {transactions.map(({ id, date, description, value, type }) => (
-              <S.Transaction key={id}>
+              <S.Transaction key={`id${id}`}>
                 <S.TransactionDate>{date}</S.TransactionDate>
                 <S.TransactionTitle>{description}</S.TransactionTitle>
-                <S.TransactionValue className={type}>
-                  {value.toFixed(2)}
-                </S.TransactionValue>
+                <div>
+                  <S.TransactionValue className={type}>
+                    {value.toString().replace("-", "")}
+                  </S.TransactionValue>
+                  <span>X</span>
+                </div>
               </S.Transaction>
             ))}
-          </>
+          </S.TransactionList>
         )}
 
         <S.Balance>
           <S.BalanceTitle>SALDO</S.BalanceTitle>
           <S.BalanceValue className={balance.inOut}>
-            {balance.value !== 0 ? balance.value.toFixed(2) : ""}
+            {balance.value !== 0 ? balance.value : ""}
           </S.BalanceValue>
         </S.Balance>
       </S.Content>
