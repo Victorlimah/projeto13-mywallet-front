@@ -3,12 +3,15 @@ import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../../provider/UserContext";
 import Logout from "./../../assets/logout.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { token } = useContext(UserContext);
+  const { token, setToken } = useContext(UserContext);
   const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [name, setName] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -43,12 +46,12 @@ export default function Home() {
           </S.TransactionEmpty>
         ) : (
           <>
-            {transactions.map(({ id, date, title, value, type }) => (
+            {transactions.map(({ id, date, description, value, type }) => (
               <S.Transaction key={id}>
-                (<S.TransactionDate>{date}</S.TransactionDate>
-                <S.TransactionTitle>{title}</S.TransactionTitle>
+                <S.TransactionDate>{date}</S.TransactionDate>
+                <S.TransactionTitle>{description}</S.TransactionTitle>
                 <S.TransactionValue className={type}>
-                  {value}
+                  {value.toFixed(2)}
                 </S.TransactionValue>
               </S.Transaction>
             ))}
@@ -58,16 +61,34 @@ export default function Home() {
         <S.Balance>
           <S.BalanceTitle>SALDO</S.BalanceTitle>
           <S.BalanceValue className={balance.inOut}>
-            {balance.value !== 0 ? balance.value : ""}
+            {balance.value !== 0 ? balance.value.toFixed(2) : ""}
           </S.BalanceValue>
         </S.Balance>
       </S.Content>
       <S.Buttons>
-        <S.NewTransaction>Nova entrada</S.NewTransaction>
-        <S.NewTransaction>Nova saída</S.NewTransaction>
+        {/* Quando clicar aqui ir pra tela de transactions
+        com a props bool = true */}
+        <S.NewTransaction onClick={() => newTransaction(true)}>
+          Nova entrada
+        </S.NewTransaction>
+
+        <S.NewTransaction onClick={() => newTransaction(false)}>
+          Nova saída
+        </S.NewTransaction>
       </S.Buttons>
     </S.Container>
   );
-}
 
-function logOut() {}
+  function newTransaction(bool) {
+    navigate(
+      "/transaction",
+      bool ? { state: { isEntry: true } } : { state: { isEntry: false } }
+    );
+  }
+
+  function logOut() {
+    window.confirm("Você realmente deseja sair?");
+    setToken("");
+    navigate("/");
+  }
+}

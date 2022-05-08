@@ -7,7 +7,7 @@ export const Container = styled.div`
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  background-color: #8c11be; ;
+  background-color: #8c11be;
 `;
 
 export const Title = styled.h1`
