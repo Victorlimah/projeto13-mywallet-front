@@ -1,19 +1,15 @@
 import axios from "axios";
 import * as S from "./style";
-import { useState, useContext } from "react";
 import Input from "../../components/Input";
+import { URL } from "../../components/App";
+import { useState, useContext } from "react";
+import Loading from "../../components/Loading";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "./../../provider/UserContext";
-import Loading from "../../components/Loading";
 
 export default function Login() {
   const navigate = useNavigate();
   const { setToken } = useContext(UserContext);
-
-  if (localStorage.getItem("token")) {
-    setToken(localStorage.getItem("token"));
-    navigate("/home");
-  }
 
   const [textInput, setTextInput] = useState("Entrar");
   const [isActive, setIsActive] = useState(true);
@@ -55,14 +51,13 @@ export default function Login() {
     let password = elementPassword.value;
 
     try {
-      const response = await axios.post("http://localhost:5000/sing-in", {
+      const response = await axios.post(`${URL}/sing-in`, {
         email,
         password,
       });
 
       if (response.status === 200) {
         setToken(response.data.token);
-        localStorage.setItem("token", response.data.token);
         navigate("/home");
       }
     } catch (error) {

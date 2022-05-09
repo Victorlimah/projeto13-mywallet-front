@@ -1,9 +1,10 @@
 import axios from "axios";
 import * as S from "./style";
-import Input from "../../components/Input";
-import { Link, useNavigate } from "react-router-dom";
-import Loading from "../../components/Loading";
 import { useState } from "react";
+import Input from "../../components/Input";
+import { URL } from "../../components/App";
+import Loading from "../../components/Loading";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function Register() {
     };
 
     axios
-      .post("http://localhost:5000/sing-up", { user })
+      .post(`${URL}/sing-up`, { user })
 
       .then((response) => {
         if (response.status === 201) {

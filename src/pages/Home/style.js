@@ -79,6 +79,7 @@ export const NewTransaction = styled.button`
 
   span {
     width: 15%;
+    padding-bottom: 10px;
   }
 
   img {

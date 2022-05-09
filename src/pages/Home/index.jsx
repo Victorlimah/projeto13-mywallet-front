@@ -1,30 +1,27 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as S from "./style";
 import axios from "axios";
-import { useState, useEffect, useContext } from "react";
-import UserContext from "../../provider/UserContext";
-import Logout from "./../../assets/logout.svg";
-import { useNavigate } from "react-router-dom";
+import { URL } from "../../components/App";
 import plus from "./../../assets/plus.svg";
 import minus from "./../../assets/minus.svg";
 import remove from "./../../assets/delete.svg";
+import Logout from "./../../assets/logout.svg";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../../provider/UserContext";
+import { useState, useEffect, useContext } from "react";
 
 export default function Home() {
   const { token, setToken } = useContext(UserContext);
   const navigate = useNavigate();
-  if (localStorage.getItem("token")) {
-    setToken(localStorage.getItem("token"));
-  } else {
-    navigate("/");
-  }
-
-  const [balance, setBalance] = useState(0);
-  const [transactions, setTransactions] = useState([]);
-  const [name, setName] = useState("");
 
   useEffect(() => {
     getTransactions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+  const [name, setName] = useState("");
 
   return (
     <S.Container>
@@ -86,7 +83,7 @@ export default function Home() {
 
   function getTransactions() {
     axios
-      .get("http://localhost:5000/transactions", {
+      .get(`${URL}/transactions`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +101,7 @@ export default function Home() {
   function deleteTransact(id) {
     if (window.confirm("Você realmente deseja excluir este registro?")) {
       axios
-        .delete(`http://localhost:5000/transactions/${id}`, {
+        .delete(`${URL}/transactions/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -127,8 +124,9 @@ export default function Home() {
   }
 
   function logOut() {
-    window.confirm("Você realmente deseja sair?");
-    setToken("");
-    navigate("/");
+    if (window.confirm("Você realmente deseja sair?")) {
+      setToken("");
+      navigate("/");
+    }
   }
 }
