@@ -4,30 +4,25 @@ import { useState, useEffect, useContext } from "react";
 import UserContext from "../../provider/UserContext";
 import Logout from "./../../assets/logout.svg";
 import { useNavigate } from "react-router-dom";
+import plus from "./../../assets/plus.svg";
+import minus from "./../../assets/minus.svg";
+import remove from "./../../assets/delete.svg";
 
 export default function Home() {
   const { token, setToken } = useContext(UserContext);
+  const navigate = useNavigate();
+  if (localStorage.getItem("token")) {
+    setToken(localStorage.getItem("token"));
+  } else {
+    navigate("/");
+  }
+
   const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [name, setName] = useState("");
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/transactions", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setTransactions(response.data.transactions);
-        setBalance(response.data.balance);
-        setName(response.data.name);
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    getTransactions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -46,15 +41,22 @@ export default function Home() {
           </S.TransactionEmpty>
         ) : (
           <S.TransactionList>
-            {transactions.map(({ id, date, description, value, type }) => (
-              <S.Transaction key={`id${id}`}>
+            {transactions.map(({ _id, date, description, value, type }) => (
+              <S.Transaction key={_id}>
                 <S.TransactionDate>{date}</S.TransactionDate>
                 <S.TransactionTitle>{description}</S.TransactionTitle>
                 <div>
                   <S.TransactionValue className={type}>
-                    {value.toString().replace("-", "")}
+                    {value
+                      .toString()
+                      .replace("-", "")
+                      .replace(".", ",")
+                      .replace("R$", "")
+                      .trim()}
                   </S.TransactionValue>
-                  <span>X</span>
+                  <span onClick={() => deleteTransact(_id)}>
+                    <img src={remove} alt="Remove" />
+                  </span>
                 </div>
               </S.Transaction>
             ))}
@@ -69,18 +71,53 @@ export default function Home() {
         </S.Balance>
       </S.Content>
       <S.Buttons>
-        {/* Quando clicar aqui ir pra tela de transactions
-        com a props bool = true */}
         <S.NewTransaction onClick={() => newTransaction(true)}>
-          Nova entrada
+          <img src={plus} alt="Plus" />
+          <span>Nova entrada</span>
         </S.NewTransaction>
 
         <S.NewTransaction onClick={() => newTransaction(false)}>
-          Nova saída
+          <img src={minus} alt="Minus" />
+          <span>Nova saída</span>
         </S.NewTransaction>
       </S.Buttons>
     </S.Container>
   );
+
+  function getTransactions() {
+    axios
+      .get("http://localhost:5000/transactions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setTransactions(response.data.transactions);
+        setBalance(response.data.balance);
+        setName(response.data.name);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  function deleteTransact(id) {
+    if (window.confirm("Você realmente deseja excluir este registro?")) {
+      axios
+        .delete(`http://localhost:5000/transactions/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          console.log("Deleted");
+          getTransactions();
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  }
 
   function newTransaction(bool) {
     navigate(

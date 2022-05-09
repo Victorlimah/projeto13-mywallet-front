@@ -9,6 +9,12 @@ import Loading from "../../components/Loading";
 export default function Login() {
   const navigate = useNavigate();
   const { setToken } = useContext(UserContext);
+
+  if (localStorage.getItem("token")) {
+    setToken(localStorage.getItem("token"));
+    navigate("/home");
+  }
+
   const [textInput, setTextInput] = useState("Entrar");
   const [isActive, setIsActive] = useState(true);
 
@@ -56,6 +62,7 @@ export default function Login() {
 
       if (response.status === 200) {
         setToken(response.data.token);
+        localStorage.setItem("token", response.data.token);
         navigate("/home");
       }
     } catch (error) {

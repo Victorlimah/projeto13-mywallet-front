@@ -38,7 +38,7 @@ export const Logout = styled.div`
 
 export const Content = styled.div`
   width: 90%;
-  height: 65%;
+  height: 75%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -65,12 +65,26 @@ export const NewTransaction = styled.button`
   font-style: normal;
   font-weight: 700;
   font-size: 17px;
+  text-align: left;
   line-height: 20px;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
 
   &:hover {
     background-color: #640d8a;
+  }
+
+  span {
+    width: 15%;
+  }
+
+  img {
+    position: absolute;
+    top: 7%;
+    left: 2%;
   }
 `;
 
@@ -122,8 +136,17 @@ export const Transaction = styled.div`
     color: #c70000;
   }
 
-  span {
-    margin-left: 15px;
+  div {
+    width: max-content;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    color: #c6c6c6;
+    margin-left: 5px;
   }
 `;
 
@@ -134,6 +157,7 @@ export const TransactionDate = styled.span`
   font-size: 16px;
   line-height: 19px;
   color: #c6c6c6;
+  width: min-content;
 `;
 
 export const TransactionTitle = styled.span`

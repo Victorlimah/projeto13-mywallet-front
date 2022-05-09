@@ -3,6 +3,9 @@ import * as S from "./style";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserContext from "../../provider/UserContext";
 import axios from "axios";
+import minus from "../../assets/minus.svg";
+import plus from "../../assets/plus.svg";
+import remove from "../../assets/delete.svg";
 
 export default function Transaction() {
   const bool = useLocation().state.isEntry;
@@ -17,7 +20,9 @@ export default function Transaction() {
     <S.Container>
       <S.Header>
         <span>{isEntry ? "Nova entrada" : "Nova saída"}</span>
-        <span onClick={() => back()}> X </span>
+        <span onClick={() => back()}>
+          <img src={remove} alt="exit" />
+        </span>
       </S.Header>
 
       <S.Buttons>
@@ -25,14 +30,14 @@ export default function Transaction() {
           className={isEntry ? "selected" : ""}
           onClick={() => setIsEntry(true)}
         >
-          Add icon +
+          <img src={plus} alt="plus" />
         </S.Button>
 
         <S.Button
           className={isEntry ? "" : "selected"}
           onClick={() => setIsEntry(false)}
         >
-          Add icon -
+          <img src={minus} alt="minus" />
         </S.Button>
       </S.Buttons>
 

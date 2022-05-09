@@ -19,6 +19,15 @@ export const Header = styled.header`
   font-size: 26px;
   line-height: 31px;
   color: #ffffff;
+
+  span {
+    cursor: pointer;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export const Buttons = styled.div`
