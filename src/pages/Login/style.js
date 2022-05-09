@@ -53,6 +53,7 @@ export const Link = styled.span`
 
   a {
     text-decoration: none;
+    color: #fff;
   }
 
   a:hover {

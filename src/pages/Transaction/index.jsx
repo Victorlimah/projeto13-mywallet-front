@@ -1,11 +1,12 @@
-import { useState, useContext } from "react";
-import * as S from "./style";
-import { useNavigate, useLocation } from "react-router-dom";
-import UserContext from "../../provider/UserContext";
 import axios from "axios";
-import minus from "../../assets/minus.svg";
+import * as S from "./style";
+import { URL } from "../../components/App";
 import plus from "../../assets/plus.svg";
+import minus from "../../assets/minus.svg";
 import remove from "../../assets/delete.svg";
+import { useState, useContext } from "react";
+import UserContext from "../../provider/UserContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Transaction() {
   const bool = useLocation().state.isEntry;
@@ -85,7 +86,7 @@ export default function Transaction() {
     };
 
     axios
-      .post("http://localhost:5000/transactions", data, {
+      .post(`${URL}/transactions`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
